@@ -296,12 +296,13 @@ function drawBuilding() {
         }
     });
 
-    // Vykreslení výtahů - končí 5px nad podlahou
+    // Vykreslení výtahů - mezera 5px dole a 15px nahoře
     elevators.forEach(elevator => {
         floors.forEach(floor => {
-            // Šachta výtahu - končí 5px nad podlahou
+            // Šachta výtahu - zkrácená pro mezeru i nahoře
+            const shaftHeight = 65; // Zkráceno z 70 na 65
             ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.fillRect(elevator.x, floor.y - 75, elevator.width, 70);
+            ctx.fillRect(elevator.x, floor.y - 70, elevator.width, shaftHeight);
 
             // Kabina výtahu
             const elevatorGradient = ctx.createLinearGradient(
@@ -310,13 +311,13 @@ function drawBuilding() {
             elevatorGradient.addColorStop(0, elevator.color);
             elevatorGradient.addColorStop(1, '#2c3e50');
             ctx.fillStyle = elevatorGradient;
-            ctx.fillRect(elevator.x + 5, floor.y - 70, elevator.width - 10, 60);
+            ctx.fillRect(elevator.x + 5, floor.y - 65, elevator.width - 10, 55);
 
             // Symbol výtahu
             ctx.font = 'bold 20px Arial';
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
-            ctx.fillText('🛗', elevator.x + elevator.width / 2, floor.y - 40);
+            ctx.fillText('🛗', elevator.x + elevator.width / 2, floor.y - 37);
         });
     });
     ctx.textAlign = 'left';
