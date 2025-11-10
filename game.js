@@ -248,14 +248,9 @@ function drawBuilding() {
         ctx.fillStyle = floorGradient;
         ctx.fillRect(0, floor.y, floor.width, floor.height);
 
-        // Číslo patra - na podlaze, vykresleno nejdříve
+        // Číslo patra - na podlaze, bílý text bez kontury
         ctx.font = 'bold 20px Arial';
-        ctx.fillStyle = '#000000';
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 4;
-        // Bílý outline
-        ctx.strokeText(`${index + 1}. PATRO`, 10, floor.y + 18);
-        // Černý text
+        ctx.fillStyle = '#ffffff';
         ctx.fillText(`${index + 1}. PATRO`, 10, floor.y + 18);
     });
 
@@ -264,11 +259,22 @@ function drawBuilding() {
         for (let i = 0; i < 15; i++) {
             const windowX = i * 75 + 40;
             const windowY = floor.y - 65;
+            const windowWidth = 30;
 
-            // Kontrola, aby okna nebyla za výtahy
-            const isUnderElevator = elevators.some(elev =>
-                windowX >= elev.x - 10 && windowX <= elev.x + elev.width + 10
-            );
+            // Kontrola, aby okna nebyla za výtahy - rozšířená kontrola
+            const isUnderElevator = elevators.some(elev => {
+                const elevLeft = elev.x - 15; // Větší buffer vlevo
+                const elevRight = elev.x + elev.width + 15; // Větší buffer vpravo
+                const windowRight = windowX + windowWidth;
+
+                // Okno překrývá výtah, pokud:
+                // - začátek okna je v rozsahu výtahu NEBO
+                // - konec okna je v rozsahu výtahu NEBO
+                // - okno obklopuje výtah
+                return (windowX >= elevLeft && windowX <= elevRight) ||
+                       (windowRight >= elevLeft && windowRight <= elevRight) ||
+                       (windowX <= elevLeft && windowRight >= elevRight);
+            });
 
             if (isUnderElevator) continue; // Přeskoč okna pod výtahy
 
