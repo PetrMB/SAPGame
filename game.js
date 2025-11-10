@@ -91,6 +91,37 @@ let particles = [];
 // ID intervalů pro správné čištění
 let incidentInterval = null;
 
+// Stav oken pro dynamické rozsvěcování
+let windowStates = [];
+let lastWindowUpdate = 0;
+const WINDOW_UPDATE_INTERVAL = 2000; // Změna každé 2 sekundy
+
+// Inicializace oken
+function initWindows() {
+    windowStates = [];
+    for (let floor = 0; floor < FLOORS_COUNT; floor++) {
+        windowStates[floor] = [];
+        for (let i = 0; i < 15; i++) {
+            windowStates[floor][i] = Math.random() > 0.3; // 70% šance na rozsvícení
+        }
+    }
+}
+
+// Aktualizace oken (náhodné blikání)
+function updateWindows() {
+    const now = Date.now();
+    if (now - lastWindowUpdate > WINDOW_UPDATE_INTERVAL) {
+        // Změň náhodně 2-3 okna
+        const changes = Math.floor(Math.random() * 2) + 2;
+        for (let i = 0; i < changes; i++) {
+            const floor = Math.floor(Math.random() * FLOORS_COUNT);
+            const window = Math.floor(Math.random() * 15);
+            windowStates[floor][window] = !windowStates[floor][window];
+        }
+        lastWindowUpdate = now;
+    }
+}
+
 // Inicializace kávovarů
 function initCoffeeMachines() {
     coffeeMachines = [];
@@ -217,12 +248,32 @@ function drawBuilding() {
         ctx.fillStyle = floorGradient;
         ctx.fillRect(0, floor.y, floor.width, floor.height);
 
-        // Okna
+        // Číslo patra - na podlaze, vykresleno nejdříve
+        ctx.font = 'bold 20px Arial';
+        ctx.fillStyle = '#000000';
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 4;
+        // Bílý outline
+        ctx.strokeText(`${index + 1}. PATRO`, 10, floor.y + 18);
+        // Černý text
+        ctx.fillText(`${index + 1}. PATRO`, 10, floor.y + 18);
+    });
+
+    // Vykreslení oken (před výtahy)
+    floors.forEach((floor, index) => {
         for (let i = 0; i < 15; i++) {
             const windowX = i * 75 + 40;
             const windowY = floor.y - 65;
-            // Použijeme deterministický výpočet místo náhodného blikání
-            const lightOn = (index + i) % 3 !== 0;
+
+            // Kontrola, aby okna nebyla za výtahy
+            const isUnderElevator = elevators.some(elev =>
+                windowX >= elev.x - 10 && windowX <= elev.x + elev.width + 10
+            );
+
+            if (isUnderElevator) continue; // Přeskoč okna pod výtahy
+
+            // Použij dynamický stav okna
+            const lightOn = windowStates[index] && windowStates[index][i];
 
             ctx.fillStyle = lightOn ? '#f39c12' : '#34495e';
             ctx.fillRect(windowX, windowY, 30, 40);
@@ -237,14 +288,6 @@ function drawBuilding() {
             ctx.lineTo(windowX + 30, windowY + 20);
             ctx.stroke();
         }
-
-        // Číslo patra - vykresleno nakonec, aby bylo vidět přes okna
-        ctx.font = 'bold 18px Arial';
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 3;
-        ctx.strokeText(`${index + 1}. PATRO`, 10, floor.y - 70);
-        ctx.fillText(`${index + 1}. PATRO`, 10, floor.y - 70);
     });
 
     // Vykreslení výtahů
@@ -310,55 +353,87 @@ function drawCoffeeMachines() {
     ctx.restore(); // Obnovit stav canvasu
 }
 
-// Vykreslení incidentů
+// Vykreslení incidentů (jako počítače)
 function drawIncidents() {
     ctx.save(); // Uložit stav canvasu
     const now = Date.now();
 
     incidents.forEach(incident => {
         // Pulsující efekt
-        incident.pulse = Math.sin(now / 200) * 5;
+        incident.pulse = Math.sin(now / 200) * 3;
+
+        const pcX = incident.x - incident.pulse / 2;
+        const pcY = incident.y - incident.pulse / 2;
+        const pcWidth = incident.width + incident.pulse;
+        const pcHeight = incident.height + incident.pulse;
 
         // Stín
         ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-        ctx.fillRect(incident.x + 5, incident.y + 5, incident.width, incident.height);
+        ctx.fillRect(pcX + 5, pcY + 5, pcWidth, pcHeight);
 
-        // Tělo incidentu
+        // Základna monitoru (stojánek)
+        ctx.fillStyle = '#7f8c8d';
+        ctx.fillRect(pcX + pcWidth / 2 - 15, pcY + pcHeight - 5, 30, 8);
+        ctx.fillRect(pcX + pcWidth / 2 - 5, pcY + pcHeight - 12, 10, 12);
+
+        // Monitor - rám
+        ctx.fillStyle = '#2c3e50';
+        ctx.fillRect(pcX, pcY, pcWidth, pcHeight - 10);
+
+        // Monitor - obrazovka (s barvou podle typu incidentu)
+        const screenPadding = 5;
         ctx.fillStyle = incident.type.color;
         ctx.fillRect(
-            incident.x - incident.pulse / 2,
-            incident.y - incident.pulse / 2,
-            incident.width + incident.pulse,
-            incident.height + incident.pulse
+            pcX + screenPadding,
+            pcY + screenPadding,
+            pcWidth - screenPadding * 2,
+            pcHeight - 15 - screenPadding
         );
 
-        // Emoji
-        ctx.font = '35px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(incident.type.emoji, incident.x + incident.width / 2, incident.y + 35);
-
-        // Název typu
-        ctx.font = 'bold 10px Arial';
+        // "Obrazovka" s chybovou hláškou
         ctx.fillStyle = '#ffffff';
-        ctx.fillText(incident.type.name, incident.x + incident.width / 2, incident.y + incident.height + 15);
+        ctx.font = 'bold 10px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('ERROR!', pcX + pcWidth / 2, pcY + pcHeight / 2 - 5);
 
-        // Progress bar při řešení - pod incidentem pro lepší viditelnost
+        // Emoji incident typu
+        ctx.font = '20px Arial';
+        ctx.fillText(incident.type.emoji, pcX + pcWidth / 2, pcY + pcHeight / 2 + 10);
+
+        // Název typu pod monitorem
+        ctx.font = 'bold 9px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.strokeText(incident.type.name, pcX + pcWidth / 2, pcY + pcHeight + 10);
+        ctx.fillText(incident.type.name, pcX + pcWidth / 2, pcY + pcHeight + 10);
+
+        // Progress bar při řešení - pod monitorem
         if (player.isResolvingIncident && player.currentIncident === incident) {
             const elapsed = now - player.incidentStartTime;
             const progress = Math.min(elapsed / incident.type.time, 1);
 
+            const barY = incident.y + incident.height + 25;
+            const barWidth = incident.width + 10;
+
             // Pozadí progress baru
             ctx.fillStyle = '#34495e';
-            ctx.fillRect(incident.x - 5, incident.y + incident.height + 20, incident.width + 10, 12);
+            ctx.fillRect(incident.x - 5, barY, barWidth, 12);
 
             // Vyplněný progress
             ctx.fillStyle = '#2ecc71';
-            ctx.fillRect(incident.x - 5, incident.y + incident.height + 20, (incident.width + 10) * progress, 12);
+            ctx.fillRect(incident.x - 5, barY, barWidth * progress, 12);
 
             // Ohraničení
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 2;
-            ctx.strokeRect(incident.x - 5, incident.y + incident.height + 20, incident.width + 10, 12);
+            ctx.strokeRect(incident.x - 5, barY, barWidth, 12);
+
+            // Procento dokončení
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 9px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${Math.floor(progress * 100)}%`, incident.x + incident.width / 2, barY + 9);
         }
     });
 
@@ -618,6 +693,7 @@ function gameLoop() {
     // Aktualizace
     updatePlayer();
     updateParticles();
+    updateWindows(); // Aktualizace dynamických oken
     checkCollisions();
     updateUI();
 
@@ -686,6 +762,7 @@ function startGame() {
     incidents = [];
     particles = [];
     initCoffeeMachines();
+    initWindows(); // Inicializace stavu oken
 
     // Vytvoření počátečních incidentů
     for (let i = 0; i < 3; i++) {
@@ -878,3 +955,4 @@ document.getElementById('restart-btn').addEventListener('click', () => {
 
 // Inicializace
 initCoffeeMachines();
+initWindows();
