@@ -61,7 +61,19 @@
                     <p>Vyřešené incidenty: <span id="final-resolved">0</span></p>
                     <p>Celkový čas: <span id="final-time">0:00</span></p>
                 </div>
+
+                <div id="name-input-section" class="name-input-section">
+                    <p class="name-prompt">Zadej své jméno pro žebříček:</p>
+                    <input type="text" id="player-name" class="player-name-input" maxlength="10" placeholder="Tvoje jméno">
+                    <button id="save-score-btn" class="save-score-btn">💾 Uložit skóre</button>
+                </div>
+
+                <div id="saved-message" class="saved-message hidden">
+                    <p>✅ Skóre uloženo!</p>
+                </div>
+
                 <button id="restart-btn" class="restart-btn">🔄 Nová směna</button>
+                <button id="view-leaderboard-btn" class="view-leaderboard-btn">🏆 Zobrazit žebříček</button>
             </div>
         </div>
 
@@ -80,6 +92,17 @@
                     </ul>
                 </div>
                 <button id="start-btn" class="start-btn">▶️ Start</button>
+                <button id="start-leaderboard-btn" class="view-leaderboard-btn">🏆 Žebříček</button>
+            </div>
+        </div>
+
+        <div id="leaderboard-screen" class="leaderboard-screen hidden">
+            <div class="leaderboard-content">
+                <h2>🏆 Žebříček nejlepších</h2>
+                <div id="leaderboard-list" class="leaderboard-list">
+                    <!-- Zde bude zobrazený žebříček -->
+                </div>
+                <button id="close-leaderboard-btn" class="restart-btn">← Zpět</button>
             </div>
         </div>
     </div>

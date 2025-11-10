@@ -13,7 +13,7 @@ const PLAYER_SPEED = 5;
 const PLAYER_SIZE = 40;
 const FLOOR_HEIGHT = 80;
 const FLOORS_COUNT = 6;
-const ENERGY_DRAIN_RATE = 0.05;
+const ENERGY_DRAIN_RATE = 0.02; // Sníženo z 0.05 pro více času na aktivity
 const COFFEE_RESTORE = 30;
 
 // Herní stav
@@ -710,9 +710,159 @@ document.addEventListener('keyup', (e) => {
     if (e.key === ' ') keys.space = false;
 });
 
+// === ŽEBŘÍČEK - LEADERBOARD SYSTEM ===
+
+// Načtení žebříčku z localStorage
+function getLeaderboard() {
+    const leaderboard = localStorage.getItem('sapGccLeaderboard');
+    return leaderboard ? JSON.parse(leaderboard) : [];
+}
+
+// Uložení žebříčku do localStorage
+function saveLeaderboard(leaderboard) {
+    localStorage.setItem('sapGccLeaderboard', JSON.stringify(leaderboard));
+}
+
+// Přidání nového skóre
+function addScore(name, score, resolved, time) {
+    const leaderboard = getLeaderboard();
+
+    leaderboard.push({
+        name: name.trim().substring(0, 10), // Max 10 znaků
+        score: score,
+        resolved: resolved,
+        time: time,
+        date: new Date().toISOString()
+    });
+
+    // Seřazení podle skóre (od nejvyššího)
+    leaderboard.sort((a, b) => b.score - a.score);
+
+    // Ponechat pouze top 10
+    const top10 = leaderboard.slice(0, 10);
+
+    saveLeaderboard(top10);
+    return top10;
+}
+
+// Zobrazení žebříčku
+function displayLeaderboard() {
+    const leaderboard = getLeaderboard();
+    const leaderboardList = document.getElementById('leaderboard-list');
+
+    if (leaderboard.length === 0) {
+        leaderboardList.innerHTML = '<div class="no-scores">Zatím žádná skóre. Buď první! 🏆</div>';
+        return;
+    }
+
+    let html = '';
+    leaderboard.forEach((entry, index) => {
+        const rank = index + 1;
+        let rankClass = '';
+        let medal = '';
+
+        if (rank === 1) {
+            rankClass = 'top-1';
+            medal = '🥇';
+        } else if (rank === 2) {
+            rankClass = 'top-2';
+            medal = '🥈';
+        } else if (rank === 3) {
+            rankClass = 'top-3';
+            medal = '🥉';
+        }
+
+        const date = new Date(entry.date);
+        const dateStr = date.toLocaleDateString('cs-CZ');
+
+        html += `
+            <div class="leaderboard-item ${rankClass}">
+                <div class="leaderboard-rank">${medal} ${rank}.</div>
+                <div class="leaderboard-name">
+                    ${entry.name}
+                    <div class="leaderboard-details">
+                        ${entry.resolved} incidentů • ${entry.time} • ${dateStr}
+                    </div>
+                </div>
+                <div class="leaderboard-score">${entry.score} bodů</div>
+            </div>
+        `;
+    });
+
+    leaderboardList.innerHTML = html;
+}
+
+// Uložení skóre
+document.getElementById('save-score-btn').addEventListener('click', () => {
+    const nameInput = document.getElementById('player-name');
+    const name = nameInput.value.trim();
+
+    if (!name) {
+        alert('Prosím zadej své jméno!');
+        nameInput.focus();
+        return;
+    }
+
+    if (name.length > 10) {
+        alert('Jméno může mít maximálně 10 znaků!');
+        return;
+    }
+
+    // Získat finální statistiky z DOM
+    const score = parseInt(document.getElementById('final-score').textContent);
+    const resolved = parseInt(document.getElementById('final-resolved').textContent);
+    const time = document.getElementById('final-time').textContent;
+
+    // Přidat do žebříčku
+    addScore(name, score, resolved, time);
+
+    // Zobrazit potvrzení
+    document.getElementById('name-input-section').classList.add('hidden');
+    document.getElementById('saved-message').classList.remove('hidden');
+
+    // Deaktivovat tlačítko
+    document.getElementById('save-score-btn').disabled = true;
+});
+
+// Zobrazit žebříček z game over obrazovky
+document.getElementById('view-leaderboard-btn').addEventListener('click', () => {
+    document.getElementById('game-over').classList.add('hidden');
+    document.getElementById('leaderboard-screen').classList.remove('hidden');
+    displayLeaderboard();
+});
+
+// Zobrazit žebříček ze start obrazovky
+document.getElementById('start-leaderboard-btn').addEventListener('click', () => {
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('leaderboard-screen').classList.remove('hidden');
+    displayLeaderboard();
+});
+
+// Zavřít žebříček
+document.getElementById('close-leaderboard-btn').addEventListener('click', () => {
+    document.getElementById('leaderboard-screen').classList.add('hidden');
+    document.getElementById('start-screen').classList.remove('hidden');
+});
+
+// Enter pro uložení skóre
+document.getElementById('player-name').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        document.getElementById('save-score-btn').click();
+    }
+});
+
+// === KONEC ŽEBŘÍČKU ===
+
 // Tlačítka
 document.getElementById('start-btn').addEventListener('click', startGame);
-document.getElementById('restart-btn').addEventListener('click', startGame);
+document.getElementById('restart-btn').addEventListener('click', () => {
+    // Reset formuláře při restartu
+    document.getElementById('player-name').value = '';
+    document.getElementById('name-input-section').classList.remove('hidden');
+    document.getElementById('saved-message').classList.add('hidden');
+    document.getElementById('save-score-btn').disabled = false;
+    startGame();
+});
 
 // Inicializace
 initCoffeeMachines();
