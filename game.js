@@ -11,9 +11,11 @@ canvas.height = 600;
 const GRAVITY = 0.5;
 const PLAYER_SPEED = 5;
 const PLAYER_SIZE = 40;
-const FLOOR_HEIGHT = 80;
+const FLOOR_HEIGHT = 30; // Zmenšeno pro lepší rozmístění
 const FLOORS_COUNT = 6;
-const ENERGY_DRAIN_RATE = 0.02; // Sníženo z 0.05 pro více času na aktivity
+const FLOOR_SPACING = 85; // Rozestup mezi patry
+const TOP_OFFSET = 90; // Offset od vrchu pro název budovy
+const ENERGY_DRAIN_RATE = 0.035; // Zvýšeno pro cílový čas 1:30-2 min
 const COFFEE_RESTORE = 30;
 
 // Herní stav
@@ -55,11 +57,11 @@ const keys = {
     space: false
 };
 
-// Patra budovy
+// Patra budovy - vypočítáno odzdola nahoru s offsetem
 let floors = [];
 for (let i = 0; i < FLOORS_COUNT; i++) {
     floors.push({
-        y: canvas.height - FLOOR_HEIGHT - (i * 90),
+        y: canvas.height - FLOOR_HEIGHT - (i * FLOOR_SPACING),
         width: canvas.width,
         height: 20
     });
@@ -215,15 +217,10 @@ function drawBuilding() {
         ctx.fillStyle = floorGradient;
         ctx.fillRect(0, floor.y, floor.width, floor.height);
 
-        // Číslo patra
-        ctx.font = 'bold 16px Arial';
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText(`${index + 1}. PATRO`, 10, floor.y - 5);
-
         // Okna
         for (let i = 0; i < 15; i++) {
             const windowX = i * 75 + 40;
-            const windowY = floor.y - 60;
+            const windowY = floor.y - 65;
             // Použijeme deterministický výpočet místo náhodného blikání
             const lightOn = (index + i) % 3 !== 0;
 
@@ -240,6 +237,14 @@ function drawBuilding() {
             ctx.lineTo(windowX + 30, windowY + 20);
             ctx.stroke();
         }
+
+        // Číslo patra - vykresleno nakonec, aby bylo vidět přes okna
+        ctx.font = 'bold 18px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3;
+        ctx.strokeText(`${index + 1}. PATRO`, 10, floor.y - 70);
+        ctx.fillText(`${index + 1}. PATRO`, 10, floor.y - 70);
     });
 
     // Vykreslení výtahů
@@ -337,16 +342,23 @@ function drawIncidents() {
         ctx.fillStyle = '#ffffff';
         ctx.fillText(incident.type.name, incident.x + incident.width / 2, incident.y + incident.height + 15);
 
-        // Progress bar při řešení
+        // Progress bar při řešení - pod incidentem pro lepší viditelnost
         if (player.isResolvingIncident && player.currentIncident === incident) {
             const elapsed = now - player.incidentStartTime;
             const progress = Math.min(elapsed / incident.type.time, 1);
 
+            // Pozadí progress baru
             ctx.fillStyle = '#34495e';
-            ctx.fillRect(incident.x - 10, incident.y - 20, incident.width + 20, 10);
+            ctx.fillRect(incident.x - 5, incident.y + incident.height + 20, incident.width + 10, 12);
 
+            // Vyplněný progress
             ctx.fillStyle = '#2ecc71';
-            ctx.fillRect(incident.x - 10, incident.y - 20, (incident.width + 20) * progress, 10);
+            ctx.fillRect(incident.x - 5, incident.y + incident.height + 20, (incident.width + 10) * progress, 12);
+
+            // Ohraničení
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(incident.x - 5, incident.y + incident.height + 20, incident.width + 10, 12);
         }
     });
 
