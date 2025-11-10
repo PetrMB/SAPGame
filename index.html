@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP GCC - Incident Resolution Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🏢 SAP GCC</h1>
+            <p class="subtitle">Global Competence Center - Incident Resolution</p>
+        </div>
+
+        <div class="stats-panel">
+            <div class="stat">
+                <span class="stat-label">⚡ Energie:</span>
+                <div class="energy-bar">
+                    <div id="energy-fill" class="energy-fill"></div>
+                </div>
+                <span id="energy-value" class="stat-value">100%</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">🎯 Skóre:</span>
+                <span id="score" class="stat-value">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">🐛 Vyřešené:</span>
+                <span id="resolved" class="stat-value">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">⏱️ Čas:</span>
+                <span id="time" class="stat-value">0:00</span>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <div class="controls-info">
+            <div class="control-item">
+                <kbd>←</kbd><kbd>→</kbd> Pohyb
+            </div>
+            <div class="control-item">
+                <kbd>↑</kbd> Výtah nahoru
+            </div>
+            <div class="control-item">
+                <kbd>↓</kbd> Výtah dolů
+            </div>
+            <div class="control-item">
+                <kbd>SPACE</kbd> Řešit incident
+            </div>
+        </div>
+
+        <div id="game-over" class="game-over hidden">
+            <div class="game-over-content">
+                <h2>💼 Konec směny!</h2>
+                <p>Vyčerpal jsi energii!</p>
+                <div class="final-stats">
+                    <p>Finální skóre: <span id="final-score">0</span></p>
+                    <p>Vyřešené incidenty: <span id="final-resolved">0</span></p>
+                    <p>Celkový čas: <span id="final-time">0:00</span></p>
+                </div>
+                <button id="restart-btn" class="restart-btn">🔄 Nová směna</button>
+            </div>
+        </div>
+
+        <div id="start-screen" class="start-screen">
+            <div class="start-content">
+                <h2>🏢 Vítej v SAP GCC!</h2>
+                <p class="mission">Tvoje mise: Řešit incidenty v celé budově!</p>
+                <div class="instructions">
+                    <h3>📋 Instrukce:</h3>
+                    <ul>
+                        <li>🏃 Pohybuj se šipkami vlevo/vpravo</li>
+                        <li>🛗 Používej výtahy (šipky nahoru/dolů)</li>
+                        <li>🐛 Řeš incidenty stiskem MEZERNÍKU</li>
+                        <li>☕ Doplňuj energii u kávovarů</li>
+                        <li>⚡ Nenech energii klesnout na nulu!</li>
+                    </ul>
+                </div>
+                <button id="start-btn" class="start-btn">▶️ Start</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
