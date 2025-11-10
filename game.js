@@ -86,6 +86,9 @@ let coffeeMachines = [];
 // Částice (efekty)
 let particles = [];
 
+// ID intervalů pro správné čištění
+let incidentInterval = null;
+
 // Inicializace kávovarů
 function initCoffeeMachines() {
     coffeeMachines = [];
@@ -159,6 +162,8 @@ function updateParticles() {
 
 // Vykreslení částic
 function drawParticles() {
+    ctx.save(); // Uložit stav canvasu
+
     particles.forEach(p => {
         ctx.globalAlpha = p.life;
         ctx.fillStyle = p.color;
@@ -170,7 +175,8 @@ function drawParticles() {
             ctx.fillText(p.text, p.x, p.y);
         }
     });
-    ctx.globalAlpha = 1;
+
+    ctx.restore(); // Obnovit stav canvasu
 }
 
 // Vykreslení pozadí budovy
@@ -218,7 +224,8 @@ function drawBuilding() {
         for (let i = 0; i < 15; i++) {
             const windowX = i * 75 + 40;
             const windowY = floor.y - 60;
-            const lightOn = Math.random() > 0.3;
+            // Použijeme deterministický výpočet místo náhodného blikání
+            const lightOn = (index + i) % 3 !== 0;
 
             ctx.fillStyle = lightOn ? '#f39c12' : '#34495e';
             ctx.fillRect(windowX, windowY, 30, 40);
@@ -263,6 +270,8 @@ function drawBuilding() {
 
 // Vykreslení kávovarů
 function drawCoffeeMachines() {
+    ctx.save(); // Uložit stav canvasu
+
     coffeeMachines.forEach(machine => {
         if (!machine.active) return;
 
@@ -282,6 +291,7 @@ function drawCoffeeMachines() {
 
         // Emoji
         ctx.font = '30px Arial';
+        ctx.fillStyle = '#8B4513';
         ctx.fillText('☕', machine.x + machine.width / 2 - 15, machine.y - 10);
 
         // Animace páry
@@ -290,12 +300,14 @@ function drawCoffeeMachines() {
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(machine.x + machine.width / 2 - 5, machine.y - 20 + steam, 3, 10);
         ctx.fillRect(machine.x + machine.width / 2 + 5, machine.y - 25 + steam, 3, 10);
-        ctx.globalAlpha = 1;
     });
+
+    ctx.restore(); // Obnovit stav canvasu
 }
 
 // Vykreslení incidentů
 function drawIncidents() {
+    ctx.save(); // Uložit stav canvasu
     const now = Date.now();
 
     incidents.forEach(incident => {
@@ -337,13 +349,15 @@ function drawIncidents() {
             ctx.fillRect(incident.x - 10, incident.y - 20, (incident.width + 20) * progress, 10);
         }
     });
-    ctx.textAlign = 'left';
+
+    ctx.restore(); // Obnovit stav canvasu
 }
 
 // Vykreslení hráče
 function drawPlayer() {
     // Stín
     ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.beginPath();
     ctx.ellipse(player.x + player.width / 2, player.y + player.height + 5, player.width / 2, 5, 0, 0, Math.PI * 2);
     ctx.fill();
 
@@ -373,6 +387,8 @@ function drawPlayer() {
     ctx.fillRect(player.x + player.width / 2 + 2, player.y + 8, 3, 3);
 
     // Úsměv nebo stres (podle energie)
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 1;
     ctx.beginPath();
     if (gameState.energy > 50) {
         ctx.arc(player.x + player.width / 2, player.y + 12, 4, 0, Math.PI);
@@ -599,6 +615,13 @@ function gameLoop() {
 // Game Over
 function gameOver() {
     gameState.running = false;
+
+    // Vyčištění intervalu
+    if (incidentInterval) {
+        clearInterval(incidentInterval);
+        incidentInterval = null;
+    }
+
     document.getElementById('final-score').textContent = gameState.score;
     document.getElementById('final-resolved').textContent = gameState.resolvedIncidents;
 
@@ -613,6 +636,12 @@ function gameOver() {
 
 // Start hry
 function startGame() {
+    // Vyčištění předchozího intervalu, pokud existuje
+    if (incidentInterval) {
+        clearInterval(incidentInterval);
+        incidentInterval = null;
+    }
+
     // Reset
     gameState = {
         running: true,
@@ -652,7 +681,7 @@ function startGame() {
     }
 
     // Pravidelné vytváření incidentů
-    setInterval(() => {
+    incidentInterval = setInterval(() => {
         if (gameState.running && incidents.length < 5) {
             createIncident();
         }
