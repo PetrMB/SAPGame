@@ -69,8 +69,8 @@ for (let i = 0; i < FLOORS_COUNT; i++) {
 
 // Výtahy
 let elevators = [
-    { x: 50, width: 60, color: '#3498db' },
-    { x: canvas.width - 110, width: 60, color: '#e74c3c' }
+    { x: 50, width: 40, color: '#3498db' },
+    { x: canvas.width - 90, width: 40, color: '#e74c3c' }
 ];
 
 // Incidenty
@@ -299,9 +299,9 @@ function drawBuilding() {
         }
     });
 
-    // Vykreslení výtahů - jako segmenty mezi patry
+    // Vykreslení výtahů - jako segmenty mezi patry a nad nejvyšším patrem
     elevators.forEach(elevator => {
-        // Pro každý prostor mezi patry (ne včetně nejvyššího)
+        // Pro každý prostor mezi patry
         for (let i = 0; i < FLOORS_COUNT - 1; i++) {
             const bottomFloor = floors[i];
             const topFloor = floors[i + 1];
@@ -330,6 +330,32 @@ function drawBuilding() {
             ctx.textAlign = 'center';
             ctx.fillText('🛗', elevator.x + elevator.width / 2, shaftTop + shaftHeight / 2 + 7);
         }
+
+        // Segment nad nejvyšším patrem
+        const topFloor = floors[FLOORS_COUNT - 1];
+        const gap = 10;
+        const shaftTop = 50; // Začátek pod názvem budovy
+        const shaftBottom = topFloor.y - gap;
+        const shaftHeight = shaftBottom - shaftTop;
+
+        // Šachta výtahu
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.fillRect(elevator.x, shaftTop, elevator.width, shaftHeight);
+
+        // Kabina výtahu
+        const elevatorGradient = ctx.createLinearGradient(
+            elevator.x, 0, elevator.x + elevator.width, 0
+        );
+        elevatorGradient.addColorStop(0, elevator.color);
+        elevatorGradient.addColorStop(1, '#2c3e50');
+        ctx.fillStyle = elevatorGradient;
+        ctx.fillRect(elevator.x + 5, shaftTop + 5, elevator.width - 10, shaftHeight - 10);
+
+        // Symbol výtahu (centrovaný)
+        ctx.font = 'bold 20px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText('🛗', elevator.x + elevator.width / 2, shaftTop + shaftHeight / 2 + 7);
     });
     ctx.textAlign = 'left';
 }
