@@ -1,20 +1,3 @@
-// Firebase konfigurace pro globální žebříček
-// Pro aktivaci globálního žebříčku:
-// 1. Jdi na https://console.firebase.google.com/
-// 2. Vytvoř nový projekt (zdarma)
-// 3. Přidej "Realtime Database"
-// 4. V "Rules" nastav:
-//    {
-//      "rules": {
-//        "leaderboard": {
-//          ".read": true,
-//          ".write": true
-//        }
-//      }
-//    }
-// 5. Zkopíruj své údaje do firebaseConfig níže
-// 6. Změň USE_FIREBASE na true
-
 const USE_FIREBASE = true; // Změň na true pro aktivaci
 
 const firebaseConfig = {
