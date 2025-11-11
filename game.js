@@ -300,6 +300,8 @@ function drawBuilding() {
     });
 
     // Vykreslení výtahů - jako segmenty mezi patry a nad nejvyšším patrem
+    const ELEVATOR_CABIN_HEIGHT = 50; // Fixní výška kabiny výtahu
+
     elevators.forEach(elevator => {
         // Pro každý prostor mezi patry
         for (let i = 0; i < FLOORS_COUNT - 1; i++) {
@@ -315,20 +317,21 @@ function drawBuilding() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
             ctx.fillRect(elevator.x, shaftTop, elevator.width, shaftHeight);
 
-            // Kabina výtahu
+            // Kabina výtahu - fixní výška, centrovaná ve šachtě
+            const cabinY = shaftTop + (shaftHeight - ELEVATOR_CABIN_HEIGHT) / 2;
             const elevatorGradient = ctx.createLinearGradient(
                 elevator.x, 0, elevator.x + elevator.width, 0
             );
             elevatorGradient.addColorStop(0, elevator.color);
             elevatorGradient.addColorStop(1, '#2c3e50');
             ctx.fillStyle = elevatorGradient;
-            ctx.fillRect(elevator.x + 5, shaftTop + 5, elevator.width - 10, shaftHeight - 10);
+            ctx.fillRect(elevator.x + 5, cabinY, elevator.width - 10, ELEVATOR_CABIN_HEIGHT);
 
-            // Symbol výtahu (centrovaný)
+            // Symbol výtahu (centrovaný v kabině)
             ctx.font = 'bold 20px Arial';
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
-            ctx.fillText('🛗', elevator.x + elevator.width / 2, shaftTop + shaftHeight / 2 + 7);
+            ctx.fillText('🛗', elevator.x + elevator.width / 2, cabinY + ELEVATOR_CABIN_HEIGHT / 2 + 7);
         }
 
         // Segment nad nejvyšším patrem
@@ -342,20 +345,21 @@ function drawBuilding() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
         ctx.fillRect(elevator.x, shaftTop, elevator.width, shaftHeight);
 
-        // Kabina výtahu
+        // Kabina výtahu - fixní výška, centrovaná ve šachtě
+        const cabinY = shaftTop + (shaftHeight - ELEVATOR_CABIN_HEIGHT) / 2;
         const elevatorGradient = ctx.createLinearGradient(
             elevator.x, 0, elevator.x + elevator.width, 0
         );
         elevatorGradient.addColorStop(0, elevator.color);
         elevatorGradient.addColorStop(1, '#2c3e50');
         ctx.fillStyle = elevatorGradient;
-        ctx.fillRect(elevator.x + 5, shaftTop + 5, elevator.width - 10, shaftHeight - 10);
+        ctx.fillRect(elevator.x + 5, cabinY, elevator.width - 10, ELEVATOR_CABIN_HEIGHT);
 
-        // Symbol výtahu (centrovaný)
+        // Symbol výtahu (centrovaný v kabině)
         ctx.font = 'bold 20px Arial';
         ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
-        ctx.fillText('🛗', elevator.x + elevator.width / 2, shaftTop + shaftHeight / 2 + 7);
+        ctx.fillText('🛗', elevator.x + elevator.width / 2, cabinY + ELEVATOR_CABIN_HEIGHT / 2 + 7);
     });
     ctx.textAlign = 'left';
 }
