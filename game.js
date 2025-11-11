@@ -96,6 +96,9 @@ let windowStates = [];
 let lastWindowUpdate = 0;
 const WINDOW_UPDATE_INTERVAL = 2000; // Změna každé 2 sekundy
 
+// Proměnná pro sledování odkud jsme přišli do žebříčku
+let leaderboardSource = 'start'; // 'start' nebo 'game-over'
+
 // Inicializace oken
 function initWindows() {
     windowStates = [];
@@ -928,24 +931,15 @@ document.getElementById('save-score-btn').addEventListener('click', () => {
     document.getElementById('save-score-btn').disabled = true;
 });
 
-// Zobrazit žebříček z game over obrazovky
-document.getElementById('view-leaderboard-btn').addEventListener('click', () => {
-    document.getElementById('game-over').classList.add('hidden');
-    document.getElementById('leaderboard-screen').classList.remove('hidden');
-    displayLeaderboard();
-});
-
-// Zobrazit žebříček ze start obrazovky
-document.getElementById('start-leaderboard-btn').addEventListener('click', () => {
-    document.getElementById('start-screen').classList.add('hidden');
-    document.getElementById('leaderboard-screen').classList.remove('hidden');
-    displayLeaderboard();
-});
-
 // Zavřít žebříček
 document.getElementById('close-leaderboard-btn').addEventListener('click', () => {
     document.getElementById('leaderboard-screen').classList.add('hidden');
-    document.getElementById('start-screen').classList.remove('hidden');
+    // Vrátit se na předchozí obrazovku
+    if (leaderboardSource === 'game-over') {
+        document.getElementById('game-over').classList.remove('hidden');
+    } else {
+        document.getElementById('start-screen').classList.remove('hidden');
+    }
 });
 
 // Enter pro uložení skóre
@@ -955,7 +949,59 @@ document.getElementById('player-name').addEventListener('keypress', (e) => {
     }
 });
 
+// Zobrazit žebříček z game over obrazovky
+document.getElementById('view-leaderboard-btn').addEventListener('click', () => {
+    leaderboardSource = 'game-over';
+    document.getElementById('game-over').classList.add('hidden');
+    document.getElementById('leaderboard-screen').classList.remove('hidden');
+    displayLeaderboard();
+});
+
+// Zobrazit žebříček ze start obrazovky
+document.getElementById('start-leaderboard-btn').addEventListener('click', () => {
+    leaderboardSource = 'start';
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('leaderboard-screen').classList.remove('hidden');
+    displayLeaderboard();
+});
+
 // === KONEC ŽEBŘÍČKU ===
+
+// === ESC KLÁVESA PRO ZAVŘENÍ OBRAZOVEK ===
+
+// Globální ESC handler
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const gameOver = document.getElementById('game-over');
+        const startScreen = document.getElementById('start-screen');
+        const leaderboardScreen = document.getElementById('leaderboard-screen');
+
+        // Pokud je zobrazen žebříček, vrátit se na předchozí obrazovku
+        if (!leaderboardScreen.classList.contains('hidden')) {
+            leaderboardScreen.classList.add('hidden');
+            if (leaderboardSource === 'game-over') {
+                gameOver.classList.remove('hidden');
+            } else {
+                startScreen.classList.remove('hidden');
+            }
+            return;
+        }
+
+        // Pokud je zobrazena game over obrazovka, vrátit se na start
+        if (!gameOver.classList.contains('hidden')) {
+            gameOver.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            // Reset formuláře
+            document.getElementById('player-name').value = '';
+            document.getElementById('name-input-section').classList.remove('hidden');
+            document.getElementById('saved-message').classList.add('hidden');
+            document.getElementById('save-score-btn').disabled = false;
+            return;
+        }
+    }
+});
+
+// === KONEC ESC HANDLERU ===
 
 // Tlačítka
 document.getElementById('start-btn').addEventListener('click', startGame);
