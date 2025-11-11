@@ -849,90 +849,152 @@ document.addEventListener('keyup', (e) => {
 
 // === ŽEBŘÍČEK - LEADERBOARD SYSTEM ===
 
-// Načtení žebříčku z localStorage
-function getLeaderboard() {
+// Kontrola, zda je Firebase dostupné
+function isFirebaseEnabled() {
+    return typeof USE_FIREBASE !== 'undefined' && USE_FIREBASE &&
+           typeof firebase !== 'undefined' && firebase.apps.length > 0;
+}
+
+// Načtení žebříčku (Firebase nebo localStorage)
+async function getLeaderboard() {
+    if (isFirebaseEnabled()) {
+        try {
+            const db = firebase.database();
+            const snapshot = await db.ref('leaderboard').orderByChild('score').limitToLast(50).once('value');
+            const data = snapshot.val();
+
+            if (!data) return [];
+
+            // Převést na pole a seřadit
+            const leaderboard = Object.values(data);
+            leaderboard.sort((a, b) => b.score - a.score);
+            return leaderboard.slice(0, 50); // Top 50 pro globální žebříček
+        } catch (error) {
+            console.error('Chyba při načítání Firebase žebříčku:', error);
+            // Fallback na localStorage
+            return getLocalLeaderboard();
+        }
+    } else {
+        return getLocalLeaderboard();
+    }
+}
+
+// Načtení lokálního žebříčku z localStorage
+function getLocalLeaderboard() {
     const leaderboard = localStorage.getItem('sapGccLeaderboard');
     return leaderboard ? JSON.parse(leaderboard) : [];
 }
 
-// Uložení žebříčku do localStorage
-function saveLeaderboard(leaderboard) {
-    localStorage.setItem('sapGccLeaderboard', JSON.stringify(leaderboard));
-}
-
-// Přidání nového skóre
-function addScore(name, score, resolved, time) {
-    const leaderboard = getLeaderboard();
-
-    leaderboard.push({
+// Uložení žebříčku (Firebase nebo localStorage)
+async function saveScore(name, score, resolved, time) {
+    const entry = {
         name: name.trim().substring(0, 10), // Max 10 znaků
         score: score,
         resolved: resolved,
         time: time,
         date: new Date().toISOString()
-    });
+    };
 
-    // Seřazení podle skóre (od nejvyššího)
+    if (isFirebaseEnabled()) {
+        try {
+            const db = firebase.database();
+            // Přidat nové skóre s unikátním ID
+            await db.ref('leaderboard').push(entry);
+            console.log('Skóre uloženo do globálního žebříčku! 🌍');
+            return true;
+        } catch (error) {
+            console.error('Chyba při ukládání do Firebase:', error);
+            // Fallback na localStorage
+            saveLocalScore(entry);
+            return false;
+        }
+    } else {
+        saveLocalScore(entry);
+        return true;
+    }
+}
+
+// Uložení do lokálního žebříčku
+function saveLocalScore(entry) {
+    const leaderboard = getLocalLeaderboard();
+    leaderboard.push(entry);
     leaderboard.sort((a, b) => b.score - a.score);
-
-    // Ponechat pouze top 10
     const top10 = leaderboard.slice(0, 10);
+    localStorage.setItem('sapGccLeaderboard', JSON.stringify(top10));
+}
 
-    saveLeaderboard(top10);
-    return top10;
+// Přidání nového skóre (zachováno pro zpětnou kompatibilitu)
+async function addScore(name, score, resolved, time) {
+    await saveScore(name, score, resolved, time);
+    return await getLeaderboard();
 }
 
 // Zobrazení žebříčku
-function displayLeaderboard() {
-    const leaderboard = getLeaderboard();
+async function displayLeaderboard() {
     const leaderboardList = document.getElementById('leaderboard-list');
 
-    if (leaderboard.length === 0) {
-        leaderboardList.innerHTML = '<div class="no-scores">Zatím žádná skóre. Buď první! 🏆</div>';
-        return;
-    }
+    // Zobrazit loading
+    leaderboardList.innerHTML = '<div class="loading">⏳ Načítám žebříček...</div>';
 
-    let html = '';
-    leaderboard.forEach((entry, index) => {
-        const rank = index + 1;
-        let rankClass = '';
-        let medal = '';
+    try {
+        const leaderboard = await getLeaderboard();
 
-        if (rank === 1) {
-            rankClass = 'top-1';
-            medal = '🥇';
-        } else if (rank === 2) {
-            rankClass = 'top-2';
-            medal = '🥈';
-        } else if (rank === 3) {
-            rankClass = 'top-3';
-            medal = '🥉';
+        if (leaderboard.length === 0) {
+            leaderboardList.innerHTML = '<div class="no-scores">Zatím žádná skóre. Buď první! 🏆</div>';
+            return;
         }
 
-        const date = new Date(entry.date);
-        const dateStr = date.toLocaleDateString('cs-CZ');
+        // Přidat info o typu žebříčku
+        const typeInfo = isFirebaseEnabled()
+            ? '<div class="leaderboard-type">🌍 Globální žebříček</div>'
+            : '<div class="leaderboard-type">💻 Lokální žebříček</div>';
 
-        html += `
-            <div class="leaderboard-item ${rankClass}">
-                <div class="leaderboard-rank">${medal} ${rank}.</div>
-                <div class="leaderboard-name">
-                    ${entry.name}
-                    <div class="leaderboard-details">
-                        ${entry.resolved} incidentů • ${entry.time} • ${dateStr}
+        let html = typeInfo;
+        leaderboard.forEach((entry, index) => {
+            const rank = index + 1;
+            let rankClass = '';
+            let medal = '';
+
+            if (rank === 1) {
+                rankClass = 'top-1';
+                medal = '🥇';
+            } else if (rank === 2) {
+                rankClass = 'top-2';
+                medal = '🥈';
+            } else if (rank === 3) {
+                rankClass = 'top-3';
+                medal = '🥉';
+            }
+
+            const date = new Date(entry.date);
+            const dateStr = date.toLocaleDateString('cs-CZ');
+
+            html += `
+                <div class="leaderboard-item ${rankClass}">
+                    <div class="leaderboard-rank">${medal || ''} ${rank}.</div>
+                    <div class="leaderboard-name">
+                        ${entry.name}
+                        <div class="leaderboard-details">
+                            ${entry.resolved} incidentů • ${entry.time} • ${dateStr}
+                        </div>
                     </div>
+                    <div class="leaderboard-score">${entry.score} bodů</div>
                 </div>
-                <div class="leaderboard-score">${entry.score} bodů</div>
-            </div>
-        `;
-    });
+            `;
+        });
 
-    leaderboardList.innerHTML = html;
+        leaderboardList.innerHTML = html;
+    } catch (error) {
+        console.error('Chyba při zobrazování žebříčku:', error);
+        leaderboardList.innerHTML = '<div class="error">❌ Chyba při načítání žebříčku</div>';
+    }
 }
 
 // Uložení skóre
-document.getElementById('save-score-btn').addEventListener('click', () => {
+document.getElementById('save-score-btn').addEventListener('click', async () => {
     const nameInput = document.getElementById('player-name');
     const name = nameInput.value.trim();
+    const saveBtn = document.getElementById('save-score-btn');
 
     if (!name) {
         alert('Prosím zadej své jméno!');
@@ -950,15 +1012,28 @@ document.getElementById('save-score-btn').addEventListener('click', () => {
     const resolved = parseInt(document.getElementById('final-resolved').textContent);
     const time = document.getElementById('final-time').textContent;
 
-    // Přidat do žebříčku
-    addScore(name, score, resolved, time);
+    // Zobrazit loading
+    saveBtn.textContent = '⏳ Ukládám...';
+    saveBtn.disabled = true;
 
-    // Zobrazit potvrzení
-    document.getElementById('name-input-section').classList.add('hidden');
-    document.getElementById('saved-message').classList.remove('hidden');
+    try {
+        // Přidat do žebříčku
+        await addScore(name, score, resolved, time);
 
-    // Deaktivovat tlačítko
-    document.getElementById('save-score-btn').disabled = true;
+        // Zobrazit potvrzení
+        const message = isFirebaseEnabled()
+            ? '✅ Skóre uloženo do globálního žebříčku! 🌍'
+            : '✅ Skóre uloženo lokálně!';
+
+        document.getElementById('saved-message').innerHTML = `<p>${message}</p>`;
+        document.getElementById('name-input-section').classList.add('hidden');
+        document.getElementById('saved-message').classList.remove('hidden');
+    } catch (error) {
+        console.error('Chyba při ukládání skóre:', error);
+        alert('❌ Chyba při ukládání skóre. Zkus to znovu.');
+        saveBtn.textContent = '💾 Uložit skóre';
+        saveBtn.disabled = false;
+    }
 });
 
 // Zavřít žebříček
