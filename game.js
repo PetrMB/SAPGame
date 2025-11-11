@@ -76,10 +76,10 @@ let elevators = [
 // Incidenty
 let incidents = [];
 const incidentTypes = [
-    { name: 'CRITICAL', color: '#e74c3c', time: 5000, points: 100, emoji: '🔥' },
-    { name: 'HIGH', color: '#e67e22', time: 3000, points: 50, emoji: '⚠️' },
-    { name: 'MEDIUM', color: '#f39c12', time: 2000, points: 30, emoji: '🐛' },
-    { name: 'LOW', color: '#3498db', time: 1000, points: 10, emoji: '📝' }
+    { name: 'CRITICAL', color: '#e74c3c', time: 5000, points: 100, emoji: '🔥', deadline: 20000 }, // 20s deadline
+    { name: 'HIGH', color: '#e67e22', time: 3000, points: 50, emoji: '⚠️', deadline: 30000 },      // 30s deadline
+    { name: 'MEDIUM', color: '#f39c12', time: 2000, points: 30, emoji: '🐛', deadline: 45000 },    // 45s deadline
+    { name: 'LOW', color: '#3498db', time: 1000, points: 10, emoji: '📝', deadline: 60000 }        // 60s deadline
 ];
 
 // Kávovary
@@ -156,6 +156,7 @@ function createIncident() {
     );
 
     if (!tooClose) {
+        const now = Date.now();
         incidents.push({
             x: x,
             y: floors[floorIndex].y - 60,
@@ -163,10 +164,43 @@ function createIncident() {
             height: 50,
             floor: floorIndex,
             type: type,
-            createdAt: Date.now(),
+            createdAt: now,
+            deadlineAt: now + type.deadline,
             pulse: 0
         });
     }
+}
+
+// Kontrola deadlinů incidentů
+function checkIncidentDeadlines() {
+    const now = Date.now();
+    const expiredIncidents = [];
+
+    incidents.forEach(incident => {
+        // Pokud incident není právě řešený a vypršel deadline
+        const isBeingResolved = player.isResolvingIncident && player.currentIncident === incident;
+        if (now > incident.deadlineAt && !isBeingResolved) {
+            expiredIncidents.push(incident);
+        }
+    });
+
+    // Zpracuj expirované incidenty
+    expiredIncidents.forEach(incident => {
+        // Odečti polovinu bodů jako penalizaci
+        const penalty = Math.floor(incident.type.points / 2);
+        gameState.score = Math.max(0, gameState.score - penalty);
+
+        // Vytvoř negativní částici
+        createParticle(
+            incident.x + incident.width / 2,
+            incident.y,
+            '#e74c3c',
+            '-' + penalty
+        );
+
+        // Odeber incident
+        incidents = incidents.filter(inc => inc !== incident);
+    });
 }
 
 // Vytvoření částice
@@ -456,6 +490,46 @@ function drawIncidents() {
         ctx.strokeText(incident.type.name, pcX + pcWidth / 2, pcY + pcHeight + 10);
         ctx.fillText(incident.type.name, pcX + pcWidth / 2, pcY + pcHeight + 10);
 
+        // Deadline timer (čas do expirace)
+        const timeRemaining = incident.deadlineAt - now;
+        const timeRemainingSeconds = Math.max(0, Math.ceil(timeRemaining / 1000));
+        const deadlineProgress = Math.max(0, timeRemaining / incident.type.deadline);
+
+        // Barva podle zbývajícího času
+        let timerColor = '#2ecc71'; // zelená
+        if (deadlineProgress < 0.3) {
+            timerColor = '#e74c3c'; // červená - kriticky málo času
+            // Blikání při kritickém čase
+            if (Math.floor(now / 250) % 2 === 0) {
+                incident.pulse += 5; // Silnější pulsace
+            }
+        } else if (deadlineProgress < 0.5) {
+            timerColor = '#f39c12'; // oranžová - málo času
+        }
+
+        // Deadline bar nad monitorem
+        const deadlineBarY = pcY - 15;
+        const deadlineBarWidth = pcWidth;
+
+        // Pozadí deadline baru
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(pcX, deadlineBarY, deadlineBarWidth, 8);
+
+        // Vyplněný deadline progress
+        ctx.fillStyle = timerColor;
+        ctx.fillRect(pcX, deadlineBarY, deadlineBarWidth * deadlineProgress, 8);
+
+        // Ohraničení deadline baru
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(pcX, deadlineBarY, deadlineBarWidth, 8);
+
+        // Zbývající čas (text)
+        ctx.font = 'bold 10px Arial';
+        ctx.fillStyle = timerColor;
+        ctx.textAlign = 'center';
+        ctx.fillText(`⏱️ ${timeRemainingSeconds}s`, pcX + pcWidth / 2, deadlineBarY - 3);
+
         // Progress bar při řešení - pod monitorem
         if (player.isResolvingIncident && player.currentIncident === incident) {
             const elapsed = now - player.incidentStartTime;
@@ -743,6 +817,7 @@ function gameLoop() {
     updateParticles();
     updateWindows(); // Aktualizace dynamických oken
     checkCollisions();
+    checkIncidentDeadlines(); // Kontrola deadlinů incidentů
     updateUI();
 
     requestAnimationFrame(gameLoop);
