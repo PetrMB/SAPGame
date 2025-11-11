@@ -296,15 +296,19 @@ function drawBuilding() {
         }
     });
 
-    // Vykreslení výtahů - mezera 10px dole a 10px nahoře (centrováno mezi patry)
+    // Vykreslení výtahů - jako segmenty mezi patry
     elevators.forEach(elevator => {
-        floors.forEach(floor => {
-            // Výpočet správné výšky pro mezery na obou stranách
-            const elevatorGap = 10; // Mezera na obou stranách
-            const shaftHeight = FLOOR_SPACING - (elevatorGap * 2); // 85 - 20 = 65
-            const shaftTop = floor.y - FLOOR_SPACING + elevatorGap; // Začátek s mezerou
+        // Pro každý prostor mezi patry (ne včetně nejvyššího)
+        for (let i = 0; i < FLOORS_COUNT - 1; i++) {
+            const bottomFloor = floors[i];
+            const topFloor = floors[i + 1];
 
-            // Šachta výtahu - centrovaná mezi patry
+            const gap = 10; // Mezera od podlahy
+            const shaftTop = topFloor.y + topFloor.height + gap; // Začátek od spodku horní podlahy
+            const shaftBottom = bottomFloor.y - gap; // Konec před dolní podlahou
+            const shaftHeight = shaftBottom - shaftTop;
+
+            // Šachta výtahu
             ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
             ctx.fillRect(elevator.x, shaftTop, elevator.width, shaftHeight);
 
@@ -322,7 +326,7 @@ function drawBuilding() {
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
             ctx.fillText('🛗', elevator.x + elevator.width / 2, shaftTop + shaftHeight / 2 + 7);
-        });
+        }
     });
     ctx.textAlign = 'left';
 }
