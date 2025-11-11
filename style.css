@@ -29,10 +29,10 @@ body {
     text-align: center;
     margin-bottom: 20px;
     padding: 20px;
-    background: linear-gradient(135deg, #0070f3 0%, #00a8ff 100%);
+    background: linear-gradient(135deg, #00965E 0%, #4BA82E 100%);
     border-radius: 15px;
     color: white;
-    box-shadow: 0 5px 15px rgba(0, 112, 243, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 150, 70, 0.3);
 }
 
 .header h1 {
@@ -79,7 +79,7 @@ body {
 
 .stat-value {
     font-size: 1.3em;
-    color: #0070f3;
+    color: #00965E;
     font-weight: bold;
 }
 
@@ -196,7 +196,7 @@ kbd {
 .game-over-content h2, .start-content h2 {
     font-size: 2.5em;
     margin-bottom: 20px;
-    color: #0070f3;
+    color: #00965E;
 }
 
 .mission {
@@ -215,7 +215,7 @@ kbd {
 }
 
 .instructions h3 {
-    color: #0070f3;
+    color: #00965E;
     margin-bottom: 15px;
     font-size: 1.5em;
 }
@@ -249,12 +249,12 @@ kbd {
 }
 
 .final-stats span {
-    color: #0070f3;
+    color: #00965E;
     font-weight: bold;
 }
 
 .restart-btn, .start-btn {
-    background: linear-gradient(135deg, #0070f3 0%, #00a8ff 100%);
+    background: linear-gradient(135deg, #00965E 0%, #4BA82E 100%);
     color: white;
     border: none;
     padding: 15px 40px;
@@ -262,13 +262,13 @@ kbd {
     border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
-    box-shadow: 0 5px 15px rgba(0, 112, 243, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 150, 70, 0.3);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .restart-btn:hover, .start-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 112, 243, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 150, 70, 0.4);
 }
 
 .restart-btn:active, .start-btn:active {
@@ -294,7 +294,7 @@ kbd {
     width: 100%;
     padding: 12px;
     font-size: 1.2em;
-    border: 2px solid #0070f3;
+    border: 2px solid #00965E;
     border-radius: 8px;
     text-align: center;
     margin-bottom: 15px;
@@ -304,8 +304,8 @@ kbd {
 
 .player-name-input:focus {
     outline: none;
-    border-color: #00a8ff;
-    box-shadow: 0 0 10px rgba(0, 112, 243, 0.3);
+    border-color: #4BA82E;
+    box-shadow: 0 0 10px rgba(0, 150, 70, 0.3);
 }
 
 .save-score-btn {
@@ -466,7 +466,7 @@ kbd {
 .leaderboard-rank {
     font-size: 1.5em;
     font-weight: bold;
-    color: #0070f3;
+    color: #00965E;
     min-width: 50px;
 }
 
@@ -480,7 +480,7 @@ kbd {
 .leaderboard-score {
     font-size: 1.3em;
     font-weight: bold;
-    color: #0070f3;
+    color: #00965E;
 }
 
 .leaderboard-details {

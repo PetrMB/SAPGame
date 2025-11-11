@@ -231,12 +231,12 @@ function drawBuilding() {
     }
 
     // Název budovy nahoře
-    ctx.fillStyle = 'rgba(0, 112, 243, 0.2)';
+    ctx.fillStyle = 'rgba(0, 150, 70, 0.3)'; // Škoda zelená
     ctx.fillRect(0, 0, canvas.width, 50);
-    ctx.font = 'bold 30px Arial';
+    ctx.font = 'bold 28px Arial';
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
-    ctx.fillText('SAP GCC BUILDING', canvas.width / 2, 35);
+    ctx.fillText('SAP GROUP COMPETENCE CENTER', canvas.width / 2, 35);
     ctx.textAlign = 'left';
 
     // Vykreslení pater
@@ -296,13 +296,17 @@ function drawBuilding() {
         }
     });
 
-    // Vykreslení výtahů - mezera 5px dole a 15px nahoře
+    // Vykreslení výtahů - mezera 10px dole a 10px nahoře (centrováno mezi patry)
     elevators.forEach(elevator => {
         floors.forEach(floor => {
-            // Šachta výtahu - zkrácená pro mezeru i nahoře
-            const shaftHeight = 65; // Zkráceno z 70 na 65
+            // Výpočet správné výšky pro mezery na obou stranách
+            const elevatorGap = 10; // Mezera na obou stranách
+            const shaftHeight = FLOOR_SPACING - (elevatorGap * 2); // 85 - 20 = 65
+            const shaftTop = floor.y - FLOOR_SPACING + elevatorGap; // Začátek s mezerou
+
+            // Šachta výtahu - centrovaná mezi patry
             ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.fillRect(elevator.x, floor.y - 70, elevator.width, shaftHeight);
+            ctx.fillRect(elevator.x, shaftTop, elevator.width, shaftHeight);
 
             // Kabina výtahu
             const elevatorGradient = ctx.createLinearGradient(
@@ -311,13 +315,13 @@ function drawBuilding() {
             elevatorGradient.addColorStop(0, elevator.color);
             elevatorGradient.addColorStop(1, '#2c3e50');
             ctx.fillStyle = elevatorGradient;
-            ctx.fillRect(elevator.x + 5, floor.y - 65, elevator.width - 10, 55);
+            ctx.fillRect(elevator.x + 5, shaftTop + 5, elevator.width - 10, shaftHeight - 10);
 
-            // Symbol výtahu
+            // Symbol výtahu (centrovaný)
             ctx.font = 'bold 20px Arial';
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
-            ctx.fillText('🛗', elevator.x + elevator.width / 2, floor.y - 37);
+            ctx.fillText('🛗', elevator.x + elevator.width / 2, shaftTop + shaftHeight / 2 + 7);
         });
     });
     ctx.textAlign = 'left';
