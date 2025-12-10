@@ -1,0 +1,363 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "name": "Smažený kapr",
+      "category": "main",
+      "categoryName": "Hlavní jídlo",
+      "description": "Tradiční český vánoční kapr obalovaný v strouhance",
+      "prepTime": 30,
+      "cookTime": 20,
+      "servings": 4,
+      "difficulty": "střední",
+      "ingredients": [
+        {"name": "kapr", "amount": 1, "unit": "kg", "category": "Maso a ryby"},
+        {"name": "vejce", "amount": 2, "unit": "ks", "category": "Mléčné výrobky"},
+        {"name": "strouhanka", "amount": 200, "unit": "g", "category": "Pečivo"},
+        {"name": "hladká mouka", "amount": 100, "unit": "g", "category": "Trvanlivé"},
+        {"name": "sůl", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "pepř", "amount": 0.5, "unit": "lžička", "category": "Koření"},
+        {"name": "olej na smažení", "amount": 500, "unit": "ml", "category": "Oleje"},
+        {"name": "citrón", "amount": 1, "unit": "ks", "category": "Ovoce a zelenina"}
+      ],
+      "instructions": [
+        "Kapra nakrájejte na porce a osušte.",
+        "Připravte si tři misky - s moukou, rozšlehanými vejci a strouhankou.",
+        "Porce kapra osolte, opepřete.",
+        "Obalte v mouce, vejci a strouhance.",
+        "Smažte na rozpáleném oleji dozlatova z obou stran (cca 5-7 minut z každé strany).",
+        "Servírujte s citrónem."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bramborový salát",
+      "category": "side",
+      "categoryName": "Příloha",
+      "description": "Klasický český bramborový salát s majonézou",
+      "prepTime": 40,
+      "cookTime": 30,
+      "servings": 6,
+      "difficulty": "snadná",
+      "ingredients": [
+        {"name": "brambory", "amount": 1, "unit": "kg", "category": "Ovoce a zelenina"},
+        {"name": "mrkev", "amount": 2, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "celer", "amount": 0.25, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "petržel", "amount": 1, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "kyselé okurky", "amount": 3, "unit": "ks", "category": "Trvanlivé"},
+        {"name": "hrášek konzervovaný", "amount": 1, "unit": "plechovka", "category": "Trvanlivé"},
+        {"name": "vejce natvrdo", "amount": 3, "unit": "ks", "category": "Mléčné výrobky"},
+        {"name": "majonéza", "amount": 200, "unit": "g", "category": "Trvanlivé"},
+        {"name": "hořčice", "amount": 2, "unit": "lžíce", "category": "Koření"},
+        {"name": "sůl", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "pepř", "amount": 0.5, "unit": "lžička", "category": "Koření"},
+        {"name": "ocet", "amount": 2, "unit": "lžíce", "category": "Koření"}
+      ],
+      "instructions": [
+        "Brambory, mrkev, celer a petržel uvařte ve slupce.",
+        "Nechte vychladnout a nakrájejte na kostičky.",
+        "Přidejte nakrájené okurky, hrášek a nakrájená vejce.",
+        "Přidejte majonézu, hořčici, sůl, pepř a ocet.",
+        "Vše dobře promíchejte a nechte odležet v lednici minimálně 2 hodiny."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Rybí polévka",
+      "category": "main",
+      "categoryName": "Hlavní jídlo",
+      "description": "Vydatná vánoční polévka z kapra",
+      "prepTime": 20,
+      "cookTime": 60,
+      "servings": 6,
+      "difficulty": "střední",
+      "ingredients": [
+        {"name": "kapr (hlava, kosti, ploutve)", "amount": 500, "unit": "g", "category": "Maso a ryby"},
+        {"name": "mrkev", "amount": 2, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "petržel", "amount": 1, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "celer", "amount": 0.25, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "cibule", "amount": 1, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "voda", "amount": 2, "unit": "l", "category": "Trvanlivé"},
+        {"name": "bobkový list", "amount": 2, "unit": "ks", "category": "Koření"},
+        {"name": "nové koření", "amount": 5, "unit": "ks", "category": "Koření"},
+        {"name": "pepř", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "sůl", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "strouhanka", "amount": 50, "unit": "g", "category": "Pečivo"}
+      ],
+      "instructions": [
+        "Zeleninu nakrájejte na větší kousky.",
+        "Vložte do hrnce s vodou společně s rybími částmi a kořením.",
+        "Vařte 45-60 minut na mírném ohni.",
+        "Precedte přes síto.",
+        "Přidejte strouhanku pro zahuštění.",
+        "Dochutit solí a pepřem."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Vanilkové rohlíčky",
+      "category": "dessert",
+      "categoryName": "Cukroví",
+      "description": "Křehké vanilkové cukroví",
+      "prepTime": 30,
+      "cookTime": 15,
+      "servings": 50,
+      "difficulty": "snadná",
+      "ingredients": [
+        {"name": "hladká mouka", "amount": 280, "unit": "g", "category": "Trvanlivé"},
+        {"name": "máslo", "amount": 200, "unit": "g", "category": "Mléčné výrobky"},
+        {"name": "moučkový cukr", "amount": 80, "unit": "g", "category": "Trvanlivé"},
+        {"name": "mleté ořechy", "amount": 100, "unit": "g", "category": "Trvanlivé"},
+        {"name": "vanilkový cukr", "amount": 2, "unit": "sáček", "category": "Trvanlivé"},
+        {"name": "moučkový cukr na obalení", "amount": 150, "unit": "g", "category": "Trvanlivé"}
+      ],
+      "instructions": [
+        "Všechny suroviny rychle zpracujte v těsto.",
+        "Nechte hodinu odpočinout v lednici.",
+        "Vytvořte malé rohlíčky.",
+        "Pečte na 170°C asi 12-15 minut dozlatova.",
+        "Ještě teplé obalte v moučkovém cukru smíchaném s vanilkovým cukrem."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Linecké cukroví",
+      "category": "dessert",
+      "categoryName": "Cukroví",
+      "description": "Tradiční linecké s marmeládou",
+      "prepTime": 45,
+      "cookTime": 12,
+      "servings": 40,
+      "difficulty": "střední",
+      "ingredients": [
+        {"name": "hladká mouka", "amount": 300, "unit": "g", "category": "Trvanlivé"},
+        {"name": "máslo", "amount": 200, "unit": "g", "category": "Mléčné výrobky"},
+        {"name": "moučkový cukr", "amount": 100, "unit": "g", "category": "Trvanlivé"},
+        {"name": "žloutek", "amount": 2, "unit": "ks", "category": "Mléčné výrobky"},
+        {"name": "citrónová kůra", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "marmeláda", "amount": 200, "unit": "g", "category": "Trvanlivé"},
+        {"name": "moučkový cukr na posypání", "amount": 50, "unit": "g", "category": "Trvanlivé"}
+      ],
+      "instructions": [
+        "Zpracujte těsto ze všech surovin kromě marmelády.",
+        "Nechte odpočinout v lednici 30 minut.",
+        "Vyválejte a vykrajujte kolečka.",
+        "Do poloviny kolečak vykrojte střed.",
+        "Pečte na 175°C asi 10-12 minut.",
+        "Spodní díl potřete marmeládou, přiklopte dílem s otvorem.",
+        "Posypte moučkovým cukrem."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Perníčky",
+      "category": "dessert",
+      "categoryName": "Cukroví",
+      "description": "Vánoční perníčky s polevou",
+      "prepTime": 60,
+      "cookTime": 10,
+      "servings": 60,
+      "difficulty": "střední",
+      "ingredients": [
+        {"name": "hladká mouka", "amount": 400, "unit": "g", "category": "Trvanlivé"},
+        {"name": "máslo", "amount": 100, "unit": "g", "category": "Mléčné výrobky"},
+        {"name": "med", "amount": 150, "unit": "g", "category": "Trvanlivé"},
+        {"name": "cukr", "amount": 100, "unit": "g", "category": "Trvanlivé"},
+        {"name": "vejce", "amount": 1, "unit": "ks", "category": "Mléčné výrobky"},
+        {"name": "perníkové koření", "amount": 2, "unit": "lžíce", "category": "Koření"},
+        {"name": "jedlá soda", "amount": 1, "unit": "lžička", "category": "Trvanlivé"},
+        {"name": "moučkový cukr", "amount": 250, "unit": "g", "category": "Trvanlivé"},
+        {"name": "citronová šťáva", "amount": 2, "unit": "lžíce", "category": "Ovoce a zelenina"}
+      ],
+      "instructions": [
+        "Rozehřejte med s máslem a cukrem.",
+        "Přidejte mouku, vejce, koření a sodu.",
+        "Těsto nechte odležet přes noc.",
+        "Vyválejte a vykrajujte tvary.",
+        "Pečte na 180°C asi 8-10 minut.",
+        "Po vychladnutí ozdobte polevou z moučkového cukru a citrónové šťávy."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Kapustnice",
+      "category": "main",
+      "categoryName": "Hlavní jídlo",
+      "description": "Vydatná zelná polévka s klobásou",
+      "prepTime": 20,
+      "cookTime": 90,
+      "servings": 6,
+      "difficulty": "snadná",
+      "ingredients": [
+        {"name": "kysané zelí", "amount": 500, "unit": "g", "category": "Ovoce a zelenina"},
+        {"name": "uzené maso", "amount": 300, "unit": "g", "category": "Maso a ryby"},
+        {"name": "klobása", "amount": 200, "unit": "g", "category": "Maso a ryby"},
+        {"name": "cibule", "amount": 1, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "sádlo", "amount": 2, "unit": "lžíce", "category": "Maso a ryby"},
+        {"name": "hladká mouka", "amount": 2, "unit": "lžíce", "category": "Trvanlivé"},
+        {"name": "sušené houby", "amount": 30, "unit": "g", "category": "Ovoce a zelenina"},
+        {"name": "kmín", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "bobkový list", "amount": 2, "unit": "ks", "category": "Koření"},
+        {"name": "voda", "amount": 1.5, "unit": "l", "category": "Trvanlivé"},
+        {"name": "smetana", "amount": 200, "unit": "ml", "category": "Mléčné výrobky"}
+      ],
+      "instructions": [
+        "Houby namočte a uvařte.",
+        "Na sádle osmaťte nakrájenou cibuli.",
+        "Přidejte kysané zelí a restujte.",
+        "Zaprášte moukou a opečte.",
+        "Přidejte nakrájené uzené maso, klobásu, houbový vývar, koření.",
+        "Vařte 60-90 minut.",
+        "Před podáváním přidejte smetanu."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Rybí salát",
+      "category": "side",
+      "categoryName": "Příloha",
+      "description": "Osvěžující rybí salát s majonézou",
+      "prepTime": 30,
+      "cookTime": 0,
+      "servings": 4,
+      "difficulty": "snadná",
+      "ingredients": [
+        {"name": "uzený makrela", "amount": 300, "unit": "g", "category": "Maso a ryby"},
+        {"name": "jablko", "amount": 2, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "kyselé okurky", "amount": 3, "unit": "ks", "category": "Trvanlivé"},
+        {"name": "cibule", "amount": 1, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "majonéza", "amount": 150, "unit": "g", "category": "Trvanlivé"},
+        {"name": "citronová šťáva", "amount": 1, "unit": "lžíce", "category": "Ovoce a zelenina"},
+        {"name": "sůl", "amount": 0.5, "unit": "lžička", "category": "Koření"},
+        {"name": "pepř", "amount": 0.25, "unit": "lžička", "category": "Koření"}
+      ],
+      "instructions": [
+        "Rybu zbavte kůže a kostí, nakrájejte na kousky.",
+        "Jablka a okurky nakrájejte na kostičky.",
+        "Cibuli nakrájejte najemno.",
+        "Vše smíchejte s majonézou a citrónovou šťávou.",
+        "Osolte, opepřete a nechte odležet v lednici."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Vánočka",
+      "category": "dessert",
+      "categoryName": "Pečivo",
+      "description": "Tradiční české vánoční pletenec",
+      "prepTime": 180,
+      "cookTime": 45,
+      "servings": 12,
+      "difficulty": "náročná",
+      "ingredients": [
+        {"name": "hladká mouka", "amount": 500, "unit": "g", "category": "Trvanlivé"},
+        {"name": "mléko", "amount": 250, "unit": "ml", "category": "Mléčné výrobky"},
+        {"name": "máslo", "amount": 100, "unit": "g", "category": "Mléčné výrobky"},
+        {"name": "cukr", "amount": 100, "unit": "g", "category": "Trvanlivé"},
+        {"name": "žloutek", "amount": 3, "unit": "ks", "category": "Mléčné výrobky"},
+        {"name": "droždí", "amount": 20, "unit": "g", "category": "Trvanlivé"},
+        {"name": "sůl", "amount": 0.5, "unit": "lžička", "category": "Koření"},
+        {"name": "citrónová kůra", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "rozinky", "amount": 100, "unit": "g", "category": "Trvanlivé"},
+        {"name": "mandle", "amount": 50, "unit": "g", "category": "Trvanlivé"}
+      ],
+      "instructions": [
+        "Připravte kvásek z droždí, mléka a lžíce cukru.",
+        "Zpracujte těsto ze všech surovin.",
+        "Nechte vykynout na dvojnásobek (asi 1 hodinu).",
+        "Propracujte, rozdělte a upletěte vánočku.",
+        "Nechte vykynout znovu (30 minut).",
+        "Potřete žloutkem a posypte mandlemi.",
+        "Pečte na 180°C asi 40-45 minut."
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Svařené víno",
+      "category": "drinks",
+      "categoryName": "Nápoj",
+      "description": "Hřejivý vánoční punč",
+      "prepTime": 5,
+      "cookTime": 15,
+      "servings": 6,
+      "difficulty": "snadná",
+      "ingredients": [
+        {"name": "červené víno", "amount": 750, "unit": "ml", "category": "Nápoje"},
+        {"name": "voda", "amount": 200, "unit": "ml", "category": "Trvanlivé"},
+        {"name": "cukr", "amount": 100, "unit": "g", "category": "Trvanlivé"},
+        {"name": "skořice", "amount": 2, "unit": "ks", "category": "Koření"},
+        {"name": "hřebíček", "amount": 5, "unit": "ks", "category": "Koření"},
+        {"name": "badyán", "amount": 2, "unit": "ks", "category": "Koření"},
+        {"name": "pomeranč", "amount": 1, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "citrón", "amount": 1, "unit": "ks", "category": "Ovoce a zelenina"}
+      ],
+      "instructions": [
+        "Do hrnce dejte víno, vodu a cukr.",
+        "Přidejte koření a kolečka citrusů.",
+        "Pomalu zahřívejte, ale NEVAŘTE (max 80°C).",
+        "Nechte 10-15 minut louhovat.",
+        "Precedte a servírujte horké."
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Ořechové košíčky",
+      "category": "dessert",
+      "categoryName": "Cukroví",
+      "description": "Křehké košíčky s ořechovou náplní",
+      "prepTime": 40,
+      "cookTime": 20,
+      "servings": 30,
+      "difficulty": "střední",
+      "ingredients": [
+        {"name": "hladká mouka", "amount": 200, "unit": "g", "category": "Trvanlivé"},
+        {"name": "máslo", "amount": 100, "unit": "g", "category": "Mléčné výrobky"},
+        {"name": "moučkový cukr", "amount": 50, "unit": "g", "category": "Trvanlivé"},
+        {"name": "žloutek", "amount": 1, "unit": "ks", "category": "Mléčné výrobky"},
+        {"name": "mleté ořechy", "amount": 200, "unit": "g", "category": "Trvanlivé"},
+        {"name": "cukr na náplň", "amount": 100, "unit": "g", "category": "Trvanlivé"},
+        {"name": "mléko", "amount": 100, "unit": "ml", "category": "Mléčné výrobky"},
+        {"name": "rum", "amount": 2, "unit": "lžíce", "category": "Nápoje"}
+      ],
+      "instructions": [
+        "Připravte těsto z mouky, másla, cukru a žloutku.",
+        "Vypracujte malé košíčky ve formičkách.",
+        "Pečte na 180°C asi 12 minut.",
+        "Uvařte náplň z ořechů, cukru, mléka a rumu.",
+        "Naplňte vychladlé košíčky."
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Vepřová pečeně",
+      "category": "main",
+      "categoryName": "Hlavní jídlo",
+      "description": "Křehká vepřová pečeně na zelenině",
+      "prepTime": 20,
+      "cookTime": 120,
+      "servings": 6,
+      "difficulty": "střední",
+      "ingredients": [
+        {"name": "vepřová krkovice", "amount": 1.5, "unit": "kg", "category": "Maso a ryby"},
+        {"name": "cibule", "amount": 2, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "mrkev", "amount": 2, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "celer", "amount": 0.25, "unit": "ks", "category": "Ovoce a zelenina"},
+        {"name": "česnek", "amount": 3, "unit": "stroužky", "category": "Ovoce a zelenina"},
+        {"name": "sádlo", "amount": 2, "unit": "lžíce", "category": "Maso a ryby"},
+        {"name": "kmín", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "majoránka", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "sůl", "amount": 1, "unit": "lžička", "category": "Koření"},
+        {"name": "pepř", "amount": 0.5, "unit": "lžička", "category": "Koření"},
+        {"name": "pivo", "amount": 300, "unit": "ml", "category": "Nápoje"}
+      ],
+      "instructions": [
+        "Maso nakrájejte na plátky nebo nechte vcelku.",
+        "Potřete česnekem, kmínem, solí a pepřem.",
+        "Na pánvi osmaťte na sádle.",
+        "Přidejte nakrájenou zeleninu.",
+        "Zalijte pivem a podlijte vodou.",
+        "Pečte v troubě na 160°C asi 2 hodiny doměkka."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plánovač vánočního menu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="snow"></div>
+    <div class="container">
+        <header class="header">
+            <h1>🎄 Plánovač vánočního menu 🎄</h1>
+            <p class="subtitle">Naplánujte si dokonalé Vánoce s českými recepty</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Levá strana - Katalog receptů -->
+            <section class="recipe-catalog">
+                <div class="section-header">
+                    <h2>📖 Katalog receptů</h2>
+                    <div class="filters">
+                        <button class="filter-btn active" data-category="all">Vše</button>
+                        <button class="filter-btn" data-category="main">Hlavní jídla</button>
+                        <button class="filter-btn" data-category="side">Přílohy</button>
+                        <button class="filter-btn" data-category="dessert">Cukroví</button>
+                        <button class="filter-btn" data-category="drinks">Nápoje</button>
+                    </div>
+                </div>
+                <div id="recipeList" class="recipe-list"></div>
+            </section>
+
+            <!-- Pravá strana - Vaše menu -->
+            <section class="selected-menu">
+                <div class="section-header">
+                    <h2>🍽️ Vaše menu</h2>
+                    <div class="guest-counter">
+                        <label for="guestCount">Počet hostů:</label>
+                        <button id="decreaseGuests" class="guest-btn">-</button>
+                        <input type="number" id="guestCount" value="4" min="1" max="50">
+                        <button id="increaseGuests" class="guest-btn">+</button>
+                    </div>
+                </div>
+                <div id="selectedRecipes" class="selected-recipes">
+                    <p class="empty-message">Zatím jste nevybrali žádné recepty. Klikněte na recept v katalogu pro přidání.</p>
+                </div>
+                <div class="action-buttons">
+                    <button id="generateShoppingList" class="btn btn-primary" disabled>
+                        🛒 Vytvořit nákupní seznam
+                    </button>
+                    <button id="generateTimeline" class="btn btn-secondary" disabled>
+                        ⏰ Zobrazit časovou osu
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Modal pro nákupní seznam -->
+        <div id="shoppingModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>🛒 Nákupní seznam</h2>
+                <div class="guest-info">
+                    <p>Pro <strong><span id="modalGuestCount"></span> hostů</strong></p>
+                </div>
+                <div id="shoppingList" class="shopping-list"></div>
+                <div class="modal-actions">
+                    <button id="printList" class="btn btn-secondary">🖨️ Vytisknout</button>
+                    <button id="copyList" class="btn btn-secondary">📋 Kopírovat</button>
+                    <button id="sendToRohlik" class="btn btn-primary">🚚 Vložit do košíku Rohlík.cz</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal pro časovou osu -->
+        <div id="timelineModal" class="modal">
+            <div class="modal-content timeline-modal">
+                <span class="close">&times;</span>
+                <h2>⏰ Časová osa přípravy</h2>
+                <div class="timeline-info">
+                    <p>Plánujte přípravu tak, aby bylo vše hotové k <input type="time" id="targetTime" value="18:00"></p>
+                    <button id="calculateTimeline" class="btn btn-secondary">Přepočítat</button>
+                </div>
+                <div id="timeline" class="timeline"></div>
+            </div>
+        </div>
+
+        <!-- Modal pro detail receptu -->
+        <div id="recipeModal" class="modal">
+            <div class="modal-content recipe-detail-modal">
+                <span class="close">&times;</span>
+                <div id="recipeDetail"></div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>🎅 Veselé Vánoce a dobrou chuť! 🎁</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
